@@ -2,7 +2,7 @@
 
 #include "Generation.h"
 
-Generation::Generation(Board &board) : board{board} {
+Generation::Generation(Board board) : board{board} {
     for(int i=0; i < board.getSize(); i++) {
         cells.emplace_back(i);
     }
@@ -12,7 +12,7 @@ Board Generation::getBoard() const {
     return board;
 }
 
-void Generation::setBoard(Board &board) {
+void Generation::setBoard(Board board) {
     this->board = board;
     cells.clear();
     for(int i=0; i < board.getSize(); i++) {
