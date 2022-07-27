@@ -2,24 +2,32 @@
 
 #include "Generation.h"
 
-Generation::Generation(Board board) : board{board} {
+Generation::Generation(Board &board) : board{board} {
     for(int i=0; i < board.getSize(); i++) {
         cells.emplace_back(i);
     }
 }
 
-Board Generation::getBoard() {
+Board Generation::getBoard() const {
     return board;
 }
 
-Cell Generation::getCell(int number) {
+void Generation::setBoard(Board &board) {
+    this->board = board;
+    cells.clear();
+    for(int i=0; i < board.getSize(); i++) {
+        cells.emplace_back(i);
+    }
+}
+
+Cell &Generation::getCell(const int &number) {
     if(number >= 0 && number < board.getSize()) {
         return cells.at(number);
     }
-    return Cell{-1};
+    return cells.at(0);
 }
 
-std::vector<int> Generation::getCellNeighbours(int number) {
+std::vector<int> Generation::getCellNeighbours(const int &number) {
     int row = number / board.getWidth();
     int column = number - board.getWidth() * row;
     std::vector<int> neighbours{};

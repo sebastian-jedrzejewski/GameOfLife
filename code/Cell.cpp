@@ -8,11 +8,11 @@ Cell::Cell() : Cell(0, false) {
 Cell::Cell(int number, bool isAlive) : number{number}, isAlive{isAlive} {
 }
 
-int Cell::getNumber() {
+int Cell::getNumber() const {
     return number;
 }
 
-bool Cell::getIsAlive() {
+bool Cell::getIsAlive() const {
     return isAlive;
 }
 

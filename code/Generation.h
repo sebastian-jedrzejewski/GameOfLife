@@ -12,10 +12,11 @@ private:
     std::vector<Cell> cells;
 
 public:
-    Generation(Board board);
-    Board getBoard();
-    Cell getCell(int number);
-    std::vector<int> getCellNeighbours(int number);
+    Generation(Board &board);
+    Board getBoard() const;
+    void setBoard(Board &board);
+    Cell &getCell(const int &number);
+    std::vector<int> getCellNeighbours(const int &number);
 };
 
 #endif

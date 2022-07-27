@@ -9,8 +9,8 @@ private:
 public:
     Cell();
     Cell(int number, bool isAlive=false);
-    int getNumber();
-    bool getIsAlive();
+    int getNumber() const;
+    bool getIsAlive() const;
     void setState(bool isAlive);
 };
 

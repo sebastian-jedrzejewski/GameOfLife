@@ -9,9 +9,9 @@ private:
 public:
     Board();
     Board(int width, int height);
-    int getWidth();
-    int getHeight();
-    int getSize();
+    int getWidth() const;
+    int getHeight() const;
+    int getSize() const;
 };
 
 #endif
