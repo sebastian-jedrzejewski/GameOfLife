@@ -8,6 +8,7 @@ int main() {
     do {
         menu.show();
         menu.loadInput();
+        menu.executeOption();
     } while(menu.getSelection() != '6');
     
     return 0;

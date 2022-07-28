@@ -1,16 +1,18 @@
 #include <iostream>
+#include <cstdlib>
+#include <cctype>
 
 #include "Menu.h"
+#include "Utils.h"
 
-Menu::Menu() :selection{'0'} {
-
+Menu::Menu() :selection{'0'}, appRunner{} {
 }
 
-char Menu::getSelection() {
+char Menu::getSelection() const {
     return selection;
 }
 
-void Menu::show() {
+void Menu::show() const {
     std::cout << "Conway's Game of Life" << std::endl << std::endl;
     std::cout << "---------------------" << std::endl;
     std::cout << "1. Run the chosen number of generations" << std::endl;
@@ -25,10 +27,12 @@ void Menu::show() {
 void Menu::loadInput() {
     std::cout << "Enter your choice: ";
     std::cin >> selection;
+}
 
+void Menu::executeOption() {
     switch(selection) {
         case '1':
-            std::cout << "Option 1 chosen" << std::endl;
+            option1();
             break;
         case '2':
             std::cout << "Option 2 chosen" << std::endl;
@@ -48,5 +52,49 @@ void Menu::loadInput() {
         default:
             std::cout << "Invalid option" << std::endl;
             break;  
+    }
+}
+
+void Menu::option1() {
+    appRunner.run();
+}
+
+int Menu::askForWidth() {
+    return askForDimension("width");
+}
+
+int Menu::askForHeight() {
+    return askForDimension("height");
+}
+
+int Menu::askForDimension(std::string dimension) {
+    std::string input{};
+
+    while(true) {
+        std::cout << "Enter a " << dimension << " of the board: ";
+        std::cin >> input;
+        if(Utils::isNumber(input)) {
+            return std::stoi(input);
+        }
+        else {
+            dimension[0] = std::toupper(dimension[0]);
+            std::cout << dimension << " must be a positive integer!" << std::endl;
+            dimension[0] = std::tolower(dimension[0]);
+        }
+    }
+}
+
+int Menu::askForNumberOfGenerations() {
+    std::string input{};
+    
+    while(true) {
+        std::cout << "Enter the number of generations: ";
+        std::cin >> input;
+        if(Utils::isNumber(input)) {
+            return stoi(input);
+        }
+        else {
+            std::cout << "The number of generations must be a positive integer!" << std::endl;
+        }
     }
 }
