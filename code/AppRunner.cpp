@@ -41,7 +41,6 @@ void AppRunner::run() {
 
     currentGeneration = initGeneration;
     
-    
 }
 
 void AppRunner::randomGeneration() {

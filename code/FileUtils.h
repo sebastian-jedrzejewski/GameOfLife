@@ -7,7 +7,7 @@
 class FileUtils {
 public:
     static bool read(std::string fileName, Generation &generation);
-    static void write(std::string fileName, const Generation &generation);
+    static bool write(std::string fileName, Generation &generation);
 };
 
 #endif

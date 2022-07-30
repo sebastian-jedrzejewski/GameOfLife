@@ -40,3 +40,35 @@ bool FileUtils::read(std::string fileName, Generation &generation) {
     in.close();
     return true;
 }
+
+bool FileUtils::write(std::string fileName, Generation &generation) {
+    std::ofstream out {fileName};
+
+    if(!out) {
+        std::cerr << "Problem opening file" << std::endl;
+        return false;
+    }
+
+    int width = generation.getBoard().getWidth();
+    int height = generation.getBoard().getHeight();
+
+    out << width << " " << height << std::endl;
+
+    const int numbers_in_line{10};
+    Cell *cell;
+    int aliveCells{};
+    for(int i=0; i < width*height; i++) {
+        if(aliveCells > 0 && aliveCells % numbers_in_line == 0) {
+            out << std::endl;
+        }
+
+        cell = generation.getCell(i);
+        if(cell->getIsAlive()) {
+            aliveCells++;
+            out << cell->getNumber() << " ";
+        }
+    }
+
+    out.close();
+    return true;
+}
