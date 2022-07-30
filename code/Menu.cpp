@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cctype>
+#include <fstream>
 
 #include "Menu.h"
 #include "Utils.h"
@@ -35,7 +36,7 @@ void Menu::executeOption() {
             option1();
             break;
         case '2':
-            std::cout << "Option 2 chosen" << std::endl;
+            option2();
             break; 
         case '3':
             std::cout << "Option 3 chosen" << std::endl;
@@ -55,16 +56,27 @@ void Menu::executeOption() {
     }
 }
 
-void Menu::option1() {
-    appRunner.run();
-}
-
 int Menu::askForWidth() {
     return askForDimension("width");
 }
 
 int Menu::askForHeight() {
     return askForDimension("height");
+}
+
+int Menu::askForNumberOfGenerations() {
+    std::string input{};
+    
+    while(true) {
+        std::cout << "Enter the number of generations: ";
+        std::cin >> input;
+        if(Utils::isNumber(input)) {
+            return stoi(input);
+        }
+        else {
+            std::cout << "The number of generations must be a positive integer!" << std::endl;
+        }
+    }
 }
 
 int Menu::askForDimension(std::string dimension) {
@@ -84,17 +96,30 @@ int Menu::askForDimension(std::string dimension) {
     }
 }
 
-int Menu::askForNumberOfGenerations() {
+std::string Menu::askForFileName() {
     std::string input{};
-    
-    while(true) {
-        std::cout << "Enter the number of generations: ";
-        std::cin >> input;
-        if(Utils::isNumber(input)) {
-            return stoi(input);
-        }
-        else {
-            std::cout << "The number of generations must be a positive integer!" << std::endl;
-        }
+
+    std::cout << "Enter a file path (or just a file name): ";
+    std::cin >> input;
+
+    std::ifstream in {input};
+    if(!in) {
+        std::cout << "This file has not been found. Make sure you entered the appropriate path." << std::endl;
+        in.close();
+        return "";
+    }
+    std::cout << "The file has been loaded sucessfully." << std::endl;
+    in.close();
+    return input;
+}
+
+void Menu::option1() {
+    appRunner.run();
+}
+
+void Menu::option2() {
+    std::string fileName = askForFileName();
+    if(fileName.length() > 0) {
+        appRunner.setInitFile(fileName);
     }
 }

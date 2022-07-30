@@ -9,7 +9,9 @@ private:
     AppRunner appRunner;
 
     static int askForDimension(std::string dimension);
+    static std::string askForFileName();
     void option1();
+    void option2();
 
 public:
     Menu();

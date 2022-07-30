@@ -15,7 +15,7 @@ public:
     Generation(Board board);
     Board getBoard() const;
     void setBoard(Board board);
-    Cell &getCell(const int &number);
+    Cell* getCell(const int &number);
     std::vector<int> getCellNeighbours(const int &number);
 };
 

@@ -6,6 +6,7 @@
 #include "AppRunner.h"
 #include "Utils.h"
 #include "Menu.h"
+#include "FileUtils.h"
 
 AppRunner::AppRunner() : AppRunner("", true) {
 }
@@ -30,9 +31,17 @@ void AppRunner::run() {
     // Generate an initital generation (from a file or random)
     if(initFile != "") {
         // read a file and create an initial generation
+        if(!(FileUtils::read(initFile, initGeneration))) {
+            return;
+        }
     } else {
+        // generate a random generation
         randomGeneration();
     }
+
+    currentGeneration = initGeneration;
+    
+    
 }
 
 void AppRunner::randomGeneration() {
@@ -46,11 +55,12 @@ void AppRunner::randomGeneration() {
 
     int randInt{};
     srand(time(0));
+    Cell *cell {nullptr};
     for(int i=0; i < board.getSize(); i++) {
         randInt = rand();
-        if(randInt % 2 == 0)
-            initGeneration.getCell(i).setState(true);
+        if(randInt % 2 == 0) {
+            cell = initGeneration.getCell(i);
+            cell->setState(true);
+        }
     }
-
-    currentGeneration = initGeneration;
 }

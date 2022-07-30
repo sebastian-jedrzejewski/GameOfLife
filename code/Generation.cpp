@@ -20,11 +20,11 @@ void Generation::setBoard(Board board) {
     }
 }
 
-Cell &Generation::getCell(const int &number) {
-    if(number >= 0 && number < board.getSize()) {
-        return cells.at(number);
-    }
-    return cells.at(0);
+Cell* Generation::getCell(const int &number) {
+    if(number >= 0 && number < board.getSize()) 
+        return &(cells.at(number));
+    else
+        return nullptr;
 }
 
 std::vector<int> Generation::getCellNeighbours(const int &number) {
