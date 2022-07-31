@@ -45,7 +45,7 @@ bool FileUtils::write(std::string fileName, Generation &generation) {
     std::ofstream out {fileName};
 
     if(!out) {
-        std::cerr << "Problem opening file" << std::endl;
+        std::cerr << "Problem opening file: " << fileName << std::endl;
         return false;
     }
 
@@ -58,13 +58,12 @@ bool FileUtils::write(std::string fileName, Generation &generation) {
     Cell *cell;
     int aliveCells{};
     for(int i=0; i < width*height; i++) {
-        if(aliveCells > 0 && aliveCells % numbers_in_line == 0) {
-            out << std::endl;
-        }
-
         cell = generation.getCell(i);
         if(cell->getIsAlive()) {
             aliveCells++;
+            if(aliveCells > 0 && aliveCells % numbers_in_line == 0) {
+                out << std::endl;
+            }
             out << cell->getNumber() << " ";
         }
     }

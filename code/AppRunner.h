@@ -8,7 +8,7 @@ class AppRunner {
 private:
     std::string initFile;
     bool stepByStep;
-    Generation initGeneration;
+    Generation initGeneration; // on the base of it, currentGeneration is created
     Generation currentGeneration;
     int numberOfGenerations;
 

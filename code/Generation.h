@@ -16,7 +16,8 @@ public:
     Board getBoard() const;
     void setBoard(Board board);
     Cell* getCell(const int &number);
-    std::vector<int> getCellNeighbours(const int &number);
+    int getNumberOfLiveNeighbours(const int &number);
+    void copyOf(Generation &generation);
 };
 
 #endif

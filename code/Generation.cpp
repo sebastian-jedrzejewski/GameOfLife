@@ -27,10 +27,10 @@ Cell* Generation::getCell(const int &number) {
         return nullptr;
 }
 
-std::vector<int> Generation::getCellNeighbours(const int &number) {
+int Generation::getNumberOfLiveNeighbours(const int &number) {
     int row = number / board.getWidth();
     int column = number - board.getWidth() * row;
-    std::vector<int> neighbours{};
+    int liveNeighbours{};
 
     int left = number - 1;
     int right = number + 1;
@@ -41,22 +41,37 @@ std::vector<int> Generation::getCellNeighbours(const int &number) {
     int bottomLeft = bottom - 1;
     int bottomRight = bottom + 1;
 
-    if(row != 0 && column != 0)
-        neighbours.push_back(topLeft);
-    if(row != 0)
-        neighbours.push_back(top);
-    if(row != 0 && column != (board.getWidth()-1))
-        neighbours.push_back(topRight);
-    if(column != 0)
-        neighbours.push_back(left);
-    if(column != (board.getWidth()-1))
-        neighbours.push_back(right);
-    if(column != 0 && row != (board.getHeight()-1))
-        neighbours.push_back(bottomLeft);
-    if(row != (board.getHeight()-1))
-        neighbours.push_back(bottom);
-    if(row != (board.getHeight()-1) && column != (board.getWidth()-1))
-        neighbours.push_back(bottomRight);
+    if(row != 0 && column != 0 && cells.at(topLeft).getIsAlive())
+        liveNeighbours++;
+    if(row != 0 && cells.at(top).getIsAlive())
+        liveNeighbours++;
+    if(row != 0 && column != (board.getWidth()-1) && cells.at(topRight).getIsAlive())
+        liveNeighbours++;
+    if(column != 0 && cells.at(left).getIsAlive())
+        liveNeighbours++;
+    if(column != (board.getWidth()-1) && cells.at(right).getIsAlive())
+        liveNeighbours++;
+    if(column != 0 && row != (board.getHeight()-1) && cells.at(bottomLeft).getIsAlive())
+        liveNeighbours++;
+    if(row != (board.getHeight()-1) && cells.at(bottom).getIsAlive())
+        liveNeighbours++;
+    if(row != (board.getHeight()-1) && column != (board.getWidth()-1) && cells.at(bottomRight).getIsAlive())
+        liveNeighbours++;
     
-    return neighbours;
+    return liveNeighbours;
+}
+
+void Generation::copyOf(Generation &generation) {
+    try {
+        if(this->board.getSize() != generation.board.getSize()) {
+            throw 0;
+        }
+        cells.clear();
+        for(int i=0; i < this->board.getSize(); i++) {
+            cells.push_back(generation.cells.at(i));
+        }
+    } catch(const int &ex) {
+        std::cerr << "Boards of both generations have different size." << std::endl;
+        return;
+    }
 }
