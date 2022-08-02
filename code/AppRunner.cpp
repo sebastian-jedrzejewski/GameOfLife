@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <sstream>
+#include <sys/stat.h>
 
 #include "AppRunner.h"
 #include "Utils.h"
@@ -25,7 +26,13 @@ void AppRunner::setStepByStep(bool mode) {
     stepByStep = mode;
 }
 
+std::string AppRunner::getInitFile() {
+    return initFile;
+}
+
 void AppRunner::run() {
+    mkdir("./generations");
+
     // Ask user for number of generations
     numberOfGenerations = Menu::askForNumberOfGenerations();
 
@@ -51,7 +58,7 @@ void AppRunner::run() {
     bool flag{false};
     for(int i=0; i < numberOfGenerations; i++) {
         flag = false;
-        generationFileName = "gen" + std::to_string(i) + ".txt";
+        generationFileName = "./generations/gen" + std::to_string(i) + ".txt";
         if(!(FileUtils::write(generationFileName, currentGeneration))) {
             return;
         }

@@ -61,10 +61,10 @@ bool FileUtils::write(std::string fileName, Generation &generation) {
         cell = generation.getCell(i);
         if(cell->getIsAlive()) {
             aliveCells++;
-            if(aliveCells > 0 && aliveCells % numbers_in_line == 0) {
+            out << cell->getNumber() << " ";
+            if(aliveCells % numbers_in_line == 0) {
                 out << std::endl;
             }
-            out << cell->getNumber() << " ";
         }
     }
 

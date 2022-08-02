@@ -15,14 +15,15 @@ char Menu::getSelection() const {
 
 void Menu::show() const {
     std::cout << "Conway's Game of Life" << std::endl << std::endl;
-    std::cout << "---------------------" << std::endl;
+    std::cout << "--------------------------------------------------" << std::endl;
     std::cout << "1. Run the chosen number of generations" << std::endl;
     std::cout << "2. Enter the file with initial generation" << std::endl;
-    std::cout << "3. Adjust the number of BMP images to be generated" << std::endl;
-    std::cout << "4. Switch the step-by-step mode" << std::endl;
-    std::cout << "5. Delete all files with generations" << std::endl;
-    std::cout << "6. Quit" << std::endl;
-    std::cout << "---------------------" << std::endl << std::endl;
+    std::cout << "3. Clear the file with initial generation" << std::endl;
+    std::cout << "4. Adjust the number of BMP images to be generated" << std::endl;
+    std::cout << "5. Switch the step-by-step mode" << std::endl;
+    std::cout << "6. Delete all files with generations" << std::endl;
+    std::cout << "7. Quit" << std::endl;
+    std::cout << "--------------------------------------------------" << std::endl << std::endl;
 }
 
 void Menu::loadInput() {
@@ -39,7 +40,7 @@ void Menu::executeOption() {
             option2();
             break; 
         case '3':
-            std::cout << "Option 3 chosen" << std::endl;
+            option3();
             break; 
         case '4':
             std::cout << "Option 4 chosen" << std::endl;
@@ -49,6 +50,9 @@ void Menu::executeOption() {
             break; 
         case '6':
             std::cout << "Option 6 chosen" << std::endl;
+            break;
+        case '7':
+            std::cout << "Option 7 chosen" << std::endl;
             break;
         default:
             std::cout << "Invalid option" << std::endl;
@@ -121,5 +125,16 @@ void Menu::option2() {
     std::string fileName = askForFileName();
     if(fileName.length() > 0) {
         appRunner.setInitFile(fileName);
+    }
+}
+
+void Menu::option3() {
+    if(appRunner.getInitFile() != "") {
+        appRunner.setInitFile("");
+        std::cout << "The file with initial generation cleared. Now you can draw initial generation."; 
+        std::cout << std::endl;
+    } else {
+        std::cout << "The file with initial generation has not been loaded, ";
+        std::cout << "so there's nothing to clear." << std::endl;
     }
 }

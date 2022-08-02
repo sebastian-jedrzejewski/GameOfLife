@@ -19,6 +19,7 @@ public:
     AppRunner(std::string initFile, bool stepByStep=true);
     void setInitFile(std::string name);
     void setStepByStep(bool mode);
+    std::string getInitFile();
     void run();
 };
 

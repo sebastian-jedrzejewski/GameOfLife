@@ -42,6 +42,9 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "strstream": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "chrono": "cpp",
+        "codecvt": "cpp",
+        "ratio": "cpp"
     }
 }
