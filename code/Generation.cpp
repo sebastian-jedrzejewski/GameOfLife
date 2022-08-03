@@ -61,6 +61,15 @@ int Generation::getNumberOfLiveNeighbours(const int &number) {
     return liveNeighbours;
 }
 
+int Generation::getNumberOfLiveCells() const {
+    int count{};
+    for(int i=0; i < board.getSize(); i++) {
+        if(cells.at(i).getIsAlive())
+            count++;
+    }
+    return count;
+}
+
 void Generation::copyOf(Generation &generation) {
     try {
         if(this->board.getSize() != generation.board.getSize()) {

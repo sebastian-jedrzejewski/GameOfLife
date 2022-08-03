@@ -10,7 +10,13 @@
 #include "FileUtils.h"
 #include "Rules.h"
 
-AppRunner::AppRunner() : AppRunner("", true) {
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
+AppRunner::AppRunner() : AppRunner("", false) {
 }
 
 AppRunner::AppRunner(std::string initFile, bool stepByStep) 
@@ -24,6 +30,10 @@ void AppRunner::setInitFile(std::string name) {
 
 void AppRunner::setStepByStep(bool mode) {
     stepByStep = mode;
+}
+
+bool AppRunner::getStepByStep() {
+    return stepByStep;
 }
 
 std::string AppRunner::getInitFile() {
@@ -51,22 +61,42 @@ void AppRunner::run() {
     currentGeneration.copyOf(initGeneration);
 
 
+    /* Local variables section */
     std::string generationFileName{};
     int liveNeighbours{};
     Cell *cell{nullptr};
     Rules rules{};
     bool flag{false};
+    int liveCells{}, deadCells{};
+
     for(int i=0; i < numberOfGenerations; i++) {
-        flag = false;
+        // Display information about the initial generation
+        if(i == 0) {
+            std::cout << std::endl << "---Initial generation---" << std::endl;
+            std::cout << "Number of live cells: " << initGeneration.getNumberOfLiveCells() << std::endl;
+            std::cout << "Number of dead cells: ";
+            std::cout << (initGeneration.getBoard().getSize() - initGeneration.getNumberOfLiveCells());
+            std::cout << std::endl << "Running..." << std::endl;
+            std::cout << std::endl << std::endl;
+        }
+
+        liveCells = 0;
+        deadCells = 0;
+
+        // Writing the current generation to the file
         generationFileName = "./generations/gen" + std::to_string(i) + ".txt";
         if(!(FileUtils::write(generationFileName, currentGeneration))) {
             return;
         }
 
+        // Check all the cells in initGeneration and set their state (according to the rules)
+        // in currentGeneration (which was initially the same)
         for(int j=0; j < initGeneration.getBoard().getSize(); j++) {
             cell = initGeneration.getCell(j);
             liveNeighbours = initGeneration.getNumberOfLiveNeighbours(j);
 
+            // If the cell was live, check the number of live neighbours
+            // and decide if the cell should become dead in the next generation
             if(cell->getIsAlive()) {
                 flag = false;
                 for(int n: rules.NUMBER_OF_LIVE_NEIGHBOURS_FOR_LIVE_TO_SURVIVE) {
@@ -75,9 +105,13 @@ void AppRunner::run() {
                     }
                 }
                 if(!flag) {
+                    deadCells++;
                     currentGeneration.getCell(j)->setState(false);
                 }
-            } else if(!(cell->getIsAlive())) {
+            }
+            // If the cell was dead, check the number of live neighbours
+            // and decide if the cell should become live in the next generation
+            else {
                 flag = false;
                 for(int n: rules.NUMBER_OF_LIVE_NEIGHBOURS_FOR_DEAD_TO_LIVE) {
                     if(liveNeighbours == n) {
@@ -85,15 +119,32 @@ void AppRunner::run() {
                     }
                 }
                 if(flag) {
+                    liveCells++;
                     currentGeneration.getCell(j)->setState(true);
                 }
-            } else {
-                currentGeneration.getCell(j)->setState(cell->getIsAlive());
             }
+        }
+
+        // Display more details about generations
+        if(stepByStep) {
+            Sleep(3000);
+            std::cout << "---Generation nr " << i+1 << "---" << std::endl;
+            std::cout << liveCells << " cells has become live and ";
+            std::cout << deadCells << " cells died in this generation." << std::endl << std::endl;
+            std::cout << std::endl << std::endl;
         }
 
         initGeneration.copyOf(currentGeneration);
     }
+
+    int liveCellsAtEnd = currentGeneration.getNumberOfLiveCells();
+    int deadCellsAtEnd = currentGeneration.getBoard().getSize() - liveCellsAtEnd;
+
+    Sleep(3000);
+    std::cout << std::endl <<  numberOfGenerations << " generations has been run." << std::endl;
+    std::cout << "---Last generation---" << std::endl;
+    std::cout << "Number of live cells: " << liveCellsAtEnd << std::endl;
+    std::cout << "Number of dead cells: " << deadCellsAtEnd << std::endl << std::endl;
     
 }
 

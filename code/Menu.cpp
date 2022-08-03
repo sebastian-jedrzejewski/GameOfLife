@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cctype>
 #include <fstream>
+#include <sys/stat.h>
 
 #include "Menu.h"
 #include "Utils.h"
@@ -15,15 +16,15 @@ char Menu::getSelection() const {
 
 void Menu::show() const {
     std::cout << "Conway's Game of Life" << std::endl << std::endl;
-    std::cout << "--------------------------------------------------" << std::endl;
+    std::cout << "-----------------------------------------------------------" << std::endl;
     std::cout << "1. Run the chosen number of generations" << std::endl;
     std::cout << "2. Enter the file with initial generation" << std::endl;
     std::cout << "3. Clear the file with initial generation" << std::endl;
     std::cout << "4. Adjust the number of BMP images to be generated" << std::endl;
     std::cout << "5. Switch the step-by-step mode" << std::endl;
-    std::cout << "6. Delete all files with generations" << std::endl;
+    std::cout << "6. Delete generations and images folders with their content" << std::endl;
     std::cout << "7. Quit" << std::endl;
-    std::cout << "--------------------------------------------------" << std::endl << std::endl;
+    std::cout << "-----------------------------------------------------------" << std::endl << std::endl;
 }
 
 void Menu::loadInput() {
@@ -46,10 +47,10 @@ void Menu::executeOption() {
             std::cout << "Option 4 chosen" << std::endl;
             break; 
         case '5':
-            std::cout << "Option 5 chosen" << std::endl;
+            option5();
             break; 
         case '6':
-            std::cout << "Option 6 chosen" << std::endl;
+            option6();
             break;
         case '7':
             std::cout << "Option 7 chosen" << std::endl;
@@ -137,4 +138,18 @@ void Menu::option3() {
         std::cout << "The file with initial generation has not been loaded, ";
         std::cout << "so there's nothing to clear." << std::endl;
     }
+}
+
+void Menu::option5() {
+    if(appRunner.getStepByStep()) {
+        std::cout << "Step-by-step mode has been switched off." << std::endl;
+        appRunner.setStepByStep(false);
+    } else {
+        std::cout << "Step-by-step mode has been switched on." << std::endl;
+        appRunner.setStepByStep(true);
+    }
+}
+
+void Menu::option6() {
+    
 }

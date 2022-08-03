@@ -17,6 +17,7 @@ public:
     void setBoard(Board board);
     Cell* getCell(const int &number);
     int getNumberOfLiveNeighbours(const int &number);
+    int getNumberOfLiveCells() const;
     void copyOf(Generation &generation);
 };
 
