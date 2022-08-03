@@ -5,8 +5,8 @@
 int main() {
     Menu menu{};
     
+    menu.show();
     do {
-        menu.show();
         menu.loadInput();
         menu.executeOption();
     } while(menu.getSelection() != '7');

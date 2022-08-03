@@ -10,6 +10,7 @@ private:
 
     static int askForDimension(std::string dimension);
     static std::string askForFileName();
+    void option0();
     void option1();
     void option2();
     void option3();

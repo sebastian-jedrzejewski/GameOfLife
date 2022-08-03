@@ -17,6 +17,7 @@ char Menu::getSelection() const {
 void Menu::show() const {
     std::cout << "Conway's Game of Life" << std::endl << std::endl;
     std::cout << "-----------------------------------------------------------" << std::endl;
+    std::cout << "0. Print all available actions" << std::endl;
     std::cout << "1. Run the chosen number of generations" << std::endl;
     std::cout << "2. Enter the file with initial generation" << std::endl;
     std::cout << "3. Clear the file with initial generation" << std::endl;
@@ -28,12 +29,15 @@ void Menu::show() const {
 }
 
 void Menu::loadInput() {
-    std::cout << "Enter your choice: ";
+    std::cout << "Enter your choice (0 to print options): ";
     std::cin >> selection;
 }
 
 void Menu::executeOption() {
     switch(selection) {
+        case '0':
+            show();
+            break;
         case '1':
             option1();
             break;
