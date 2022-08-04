@@ -10,12 +10,11 @@ private:
 
     static int askForDimension(std::string dimension);
     static std::string askForFileName();
-    void option0();
     void option1();
     void option2();
     void option3();
     void option5();
-    void option6();
+    static void option6(bool printMessages);
 
 public:
     Menu();
@@ -26,6 +25,7 @@ public:
     static int askForWidth();
     static int askForHeight();
     static int askForNumberOfGenerations();
+    static void deleteFoldersIfExist();
 };
 
 #endif

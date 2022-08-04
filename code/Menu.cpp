@@ -54,7 +54,7 @@ void Menu::executeOption() {
             option5();
             break; 
         case '6':
-            option6();
+            option6(true);
             break;
         case '7':
             std::cout << "Option 7 chosen" << std::endl;
@@ -122,6 +122,10 @@ std::string Menu::askForFileName() {
     return input;
 }
 
+void Menu::deleteFoldersIfExist() {
+    option6(false);
+}
+
 void Menu::option1() {
     appRunner.run();
 }
@@ -154,6 +158,33 @@ void Menu::option5() {
     }
 }
 
-void Menu::option6() {
-    
+void Menu::option6(bool printMessages) {
+    std::string deleteGenerations{};
+    std::string deleteImages{};
+
+    #ifdef _WIN32
+    deleteGenerations = "rd /s /q generations";
+    deleteImages = "rd /s /q images";
+    #else
+    deleteGenerations = "rm -d generations";
+    deleteImages = "rm -d images";
+    #endif
+
+    char deleteGenerationsInC[deleteGenerations.length()+1];
+    char deleteImagesInC[deleteImages.length()+1];
+
+    strcpy(deleteGenerationsInC, deleteGenerations.c_str());
+    strcpy(deleteImagesInC, deleteImages.c_str());
+
+    if(Utils::DoesDirectoryExist("generations")) 
+        system(deleteGenerationsInC);
+    else
+        if(printMessages)
+            std::cout << "No generations folder found." << std::endl;
+
+    if(Utils::DoesDirectoryExist("images")) 
+        system(deleteImagesInC);
+    else
+        if(printMessages)
+            std::cout << "No images folder found." << std::endl;
 }

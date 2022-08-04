@@ -41,6 +41,9 @@ std::string AppRunner::getInitFile() {
 }
 
 void AppRunner::run() {
+    // If folders with "old" data exist, then delete them
+    Menu::deleteFoldersIfExist();
+    
     mkdir("./generations");
 
     // Ask user for number of generations
