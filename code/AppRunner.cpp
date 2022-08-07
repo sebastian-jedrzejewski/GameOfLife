@@ -63,9 +63,23 @@ void AppRunner::run() {
     currentGeneration.setBoard(Board{initGeneration.getBoard().getWidth(), initGeneration.getBoard().getHeight()});
     currentGeneration.copyOf(initGeneration);
 
+    int imageWidth{};
+    int imageHeight{};
+
+    // Creating an image object with appropriate dimensions
+    if(currentGeneration.getBoard().getWidth() <= BASE_IMAGE_SIZE 
+        && currentGeneration.getBoard().getWidth() <= BASE_IMAGE_SIZE) {
+            imageWidth = BASE_IMAGE_SIZE;
+            imageHeight = BASE_IMAGE_SIZE;
+    } else {
+        imageWidth = currentGeneration.getBoard().getWidth();
+        imageHeight = currentGeneration.getBoard().getHeight();
+    }
+
+    Image image{imageWidth, imageHeight};
 
     /* Local variables section */
-    std::string generationFileName{};
+    std::string generationFileName{}, imageFileName{};
     int liveNeighbours{};
     Cell *cell{nullptr};
     Rules rules{};
@@ -91,6 +105,10 @@ void AppRunner::run() {
         if(!(FileUtils::write(generationFileName, currentGeneration))) {
             return;
         }
+
+        // imageFileName = "image" + std::to_string(i) + ".bmp";
+        generateImage(image);
+        FileUtils::exportImage(image, "image.bmp");
 
         // Check all the cells in initGeneration and set their state (according to the rules)
         // in currentGeneration (which was initially the same)
@@ -168,6 +186,57 @@ void AppRunner::randomGeneration() {
         if(randInt % 2 == 0) {
             cell = initGeneration.getCell(i);
             cell->setState(true);
+        }
+    }
+}
+
+void AppRunner::generateImage(Image &image) {
+    int boardWidth = currentGeneration.getBoard().getWidth();
+    int boardHeight = currentGeneration.getBoard().getHeight();
+    int greaterDimension = boardWidth > boardHeight ? boardWidth : boardHeight;
+    int squareSize{};
+    int imageWidth = image.getWidth();
+    int imageHeight = image.getHeight();
+
+    if(greaterDimension < BASE_IMAGE_SIZE) {
+        // if so, image width and height are equal to BASE_IMAGE_SIZE
+        squareSize = BASE_IMAGE_SIZE / greaterDimension;
+    } else {
+        squareSize = 1;
+    }
+
+    int horizontalPadding = (imageWidth - (boardWidth * squareSize)) / 2;
+    int verticalPadding = (imageHeight - (boardHeight * squareSize)) / 2;
+
+    const Color grey{0.41, 0.41, 0.41};
+    const Color black{0.0, 0.0, 0.0};
+    const Color white{1.0, 1.0, 1.0};
+
+    int row{}, column{}, numberOfCell{};
+    Cell *cell{};
+    for(int y=0; y < imageHeight; y++) {
+        for(int x=0; x < imageWidth; x++) {
+            if(y < verticalPadding || x < horizontalPadding) {
+                image.setColor(grey, x, y);
+                continue;
+            }
+
+            if(y >= boardHeight*squareSize + verticalPadding || x >= boardWidth*squareSize + horizontalPadding) {
+                image.setColor(grey, x, y);
+                continue;
+            }
+
+            row = (y - verticalPadding) / squareSize;
+            row = boardHeight - 1 - row;
+            column = (x - horizontalPadding) / squareSize;
+            numberOfCell = row * boardWidth + column;
+
+            cell = currentGeneration.getCell(numberOfCell);
+            if(cell->getIsAlive()) {
+                image.setColor(black, x, y);
+            } else {
+                image.setColor(white, x, y);
+            }
         }
     }
 }
