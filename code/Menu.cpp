@@ -176,13 +176,13 @@ void Menu::option6(bool printMessages) {
     strcpy(deleteGenerationsInC, deleteGenerations.c_str());
     strcpy(deleteImagesInC, deleteImages.c_str());
 
-    if(Utils::DoesDirectoryExist("generations")) 
+    if(Utils::doesDirectoryExist("generations")) 
         system(deleteGenerationsInC);
     else
         if(printMessages)
             std::cout << "No generations folder found." << std::endl;
 
-    if(Utils::DoesDirectoryExist("images")) 
+    if(Utils::doesDirectoryExist("images")) 
         system(deleteImagesInC);
     else
         if(printMessages)

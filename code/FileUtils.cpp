@@ -72,13 +72,13 @@ bool FileUtils::write(std::string fileName, Generation &generation) {
     return true;
 }
 
-void FileUtils::exportImage(Image &image, const char *path) {
+bool FileUtils::exportImage(Image &image, std::string path) {
     std::ofstream f;
     f.open(path, std::ios::out | std::ios::binary);
 
     if(!f.is_open()) {
         std::cout << "File could not be opened" << std::endl;
-        return;
+        return false;
     }
 
     int width = image.getWidth();
@@ -184,5 +184,5 @@ void FileUtils::exportImage(Image &image, const char *path) {
     }
 
     f.close();
-    std::cout << "File created" << std::endl;
+    return true;
 }

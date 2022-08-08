@@ -45,6 +45,7 @@ void AppRunner::run() {
     Menu::deleteFoldersIfExist();
     
     mkdir("./generations");
+    mkdir("./images");
 
     // Ask user for number of generations
     numberOfGenerations = Menu::askForNumberOfGenerations();
@@ -106,9 +107,12 @@ void AppRunner::run() {
             return;
         }
 
-        // imageFileName = "image" + std::to_string(i) + ".bmp";
+        // Generating an image of the current generation
+        imageFileName = "./images/image" + std::to_string(i) + ".bmp";
         generateImage(image);
-        FileUtils::exportImage(image, "image.bmp");
+        if(!(FileUtils::exportImage(image, imageFileName))) {
+            return;
+        };
 
         // Check all the cells in initGeneration and set their state (according to the rules)
         // in currentGeneration (which was initially the same)
@@ -191,12 +195,12 @@ void AppRunner::randomGeneration() {
 }
 
 void AppRunner::generateImage(Image &image) {
-    int boardWidth = currentGeneration.getBoard().getWidth();
-    int boardHeight = currentGeneration.getBoard().getHeight();
-    int greaterDimension = boardWidth > boardHeight ? boardWidth : boardHeight;
+    const int boardWidth = currentGeneration.getBoard().getWidth();
+    const int boardHeight = currentGeneration.getBoard().getHeight();
+    const int greaterDimension = boardWidth > boardHeight ? boardWidth : boardHeight;
     int squareSize{};
-    int imageWidth = image.getWidth();
-    int imageHeight = image.getHeight();
+    const int imageWidth = image.getWidth();
+    const int imageHeight = image.getHeight();
 
     if(greaterDimension < BASE_IMAGE_SIZE) {
         // if so, image width and height are equal to BASE_IMAGE_SIZE
@@ -205,12 +209,9 @@ void AppRunner::generateImage(Image &image) {
         squareSize = 1;
     }
 
-    int horizontalPadding = (imageWidth - (boardWidth * squareSize)) / 2;
-    int verticalPadding = (imageHeight - (boardHeight * squareSize)) / 2;
+    const int horizontalPadding = (imageWidth - (boardWidth * squareSize)) / 2;
+    const int verticalPadding = (imageHeight - (boardHeight * squareSize)) / 2;
 
-    const Color grey{0.41, 0.41, 0.41};
-    const Color black{0.0, 0.0, 0.0};
-    const Color white{1.0, 1.0, 1.0};
 
     int row{}, column{}, numberOfCell{};
     Cell *cell{};

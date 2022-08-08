@@ -13,6 +13,11 @@ private:
     // then image size in pixels is equal to board size.
     const int BASE_IMAGE_SIZE = 500;
 
+    // color constants
+    const Color grey{0.41, 0.41, 0.41};
+    const Color black{0.0, 0.0, 0.0};
+    const Color white{1.0, 1.0, 1.0};
+
     std::string initFile;
     bool stepByStep;
     Generation initGeneration; // on the base of it, currentGeneration is created

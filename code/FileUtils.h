@@ -9,7 +9,7 @@ class FileUtils {
 public:
     static bool read(std::string fileName, Generation &generation);
     static bool write(std::string fileName, Generation &generation);
-    static void exportImage(Image &image, const char *path);
+    static bool exportImage(Image &image, std::string path);
 };
 
 #endif

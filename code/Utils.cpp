@@ -11,7 +11,7 @@ bool Utils::isNumber(std::string str) {
     return true;
 }
 
-bool Utils::DoesDirectoryExist(const std::string &s)
+bool Utils::doesDirectoryExist(const std::string &s)
 {
   struct stat buffer;
   return (stat (s.c_str(), &buffer) == 0);
