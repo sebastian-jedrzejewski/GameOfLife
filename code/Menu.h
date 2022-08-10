@@ -10,13 +10,17 @@ private:
 
     static int askForDimension(std::string dimension);
     static std::string askForFileName();
-    void option1();
-    void option2();
-    void option3();
-    void option5();
-    static void option6(bool printMessages);
+    void runGenerations();
+    void loadFileName();
+    void clearFileName();
+    void switchGeneratingFiles();
+    void switchGeneratingImages();
+    void switchStepByStep();
+    static void removeFolders(bool printMessages);
 
 public:
+    const static char QUIT = '8';
+
     Menu();
     char getSelection() const;
     void show() const;

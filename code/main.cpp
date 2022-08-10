@@ -9,7 +9,7 @@ int main() {
     do {
         menu.loadInput();
         menu.executeOption();
-    } while(menu.getSelection() != '7');
+    } while(menu.getSelection() != Menu::QUIT);
     
     return 0;
 }

@@ -16,11 +16,12 @@
 #include <unistd.h>
 #endif
 
-AppRunner::AppRunner() : AppRunner("", false) {
+AppRunner::AppRunner() : AppRunner("", true, true, false) {
 }
 
-AppRunner::AppRunner(std::string initFile, bool stepByStep) 
-    : initFile{initFile}, stepByStep{stepByStep}, initGeneration{Board{0, 0}}, currentGeneration{Board{0,0}},
+AppRunner::AppRunner(std::string initFile, bool generateFiles, bool generateImages, bool stepByStep) 
+    : initFile{initFile}, generateFiles{generateFiles}, generateImages{generateImages},
+     stepByStep{stepByStep}, initGeneration{Board{0, 0}}, currentGeneration{Board{0,0}},
       numberOfGenerations{0} {
 }
 
@@ -32,11 +33,27 @@ void AppRunner::setStepByStep(bool mode) {
     stepByStep = mode;
 }
 
-bool AppRunner::getStepByStep() {
+void AppRunner::setGenerateFiles(bool mode) {
+    generateFiles = mode;
+}
+
+void AppRunner::setGenerateImages(bool mode) {
+    generateImages = mode;
+}
+
+bool AppRunner::getGenerateFiles() const {
+    return generateFiles;
+}
+
+bool AppRunner::getGenerateImages() const {
+    return generateImages;
+}
+
+bool AppRunner::getStepByStep() const {
     return stepByStep;
 }
 
-std::string AppRunner::getInitFile() {
+std::string AppRunner::getInitFile() const {
     return initFile;
 }
 
@@ -44,8 +61,10 @@ void AppRunner::run() {
     // If folders with "old" data exist, then delete them
     Menu::deleteFoldersIfExist();
     
-    mkdir("./generations");
-    mkdir("./images");
+    if(generateFiles)
+        mkdir("./generations");
+    if(generateImages)
+        mkdir("./images");
 
     // Ask user for number of generations
     numberOfGenerations = Menu::askForNumberOfGenerations();
@@ -101,18 +120,22 @@ void AppRunner::run() {
         liveCells = 0;
         deadCells = 0;
 
-        // Writing the current generation to the file
-        generationFileName = "./generations/gen" + std::to_string(i) + ".txt";
-        if(!(FileUtils::write(generationFileName, currentGeneration))) {
-            return;
+        // Writing the current generation to the file if needed
+        if(generateFiles) {
+            generationFileName = "./generations/gen" + std::to_string(i) + ".txt";
+            if(!(FileUtils::write(generationFileName, currentGeneration))) {
+                return;
+            }
         }
 
-        // Generating an image of the current generation
-        imageFileName = "./images/image" + std::to_string(i) + ".bmp";
-        generateImage(image);
-        if(!(FileUtils::exportImage(image, imageFileName))) {
-            return;
-        };
+        // Generating an image of the current generation if needed
+        if(generateImages) {
+            imageFileName = "./images/image" + std::to_string(i) + ".bmp";
+            generateImage(image);
+            if(!(FileUtils::exportImage(image, imageFileName))) {
+                return;
+            };
+        }
 
         // Check all the cells in initGeneration and set their state (according to the rules)
         // in currentGeneration (which was initially the same)
@@ -211,6 +234,11 @@ void AppRunner::generateImage(Image &image) {
 
     const int horizontalPadding = (imageWidth - (boardWidth * squareSize)) / 2;
     const int verticalPadding = (imageHeight - (boardHeight * squareSize)) / 2;
+
+    // color constants
+    const Color grey{0.41, 0.41, 0.41};
+    const Color black{0.0, 0.0, 0.0};
+    const Color white{1.0, 1.0, 1.0};
 
 
     int row{}, column{}, numberOfCell{};

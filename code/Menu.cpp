@@ -21,10 +21,11 @@ void Menu::show() const {
     std::cout << "1. Run the chosen number of generations" << std::endl;
     std::cout << "2. Enter the file with initial generation" << std::endl;
     std::cout << "3. Clear the file with initial generation" << std::endl;
-    std::cout << "4. Adjust the number of BMP images to be generated" << std::endl;
-    std::cout << "5. Switch the step-by-step mode" << std::endl;
-    std::cout << "6. Delete generations and images folders with their content" << std::endl;
-    std::cout << "7. Quit" << std::endl;
+    std::cout << "4. Turn on/off generating files with generations" << std::endl;
+    std::cout << "5. Turn on/off generating BMP images" << std::endl;
+    std::cout << "6. Switch the step-by-step mode" << std::endl;
+    std::cout << "7. Delete generations and images folders with their content" << std::endl;
+    std::cout << "8. Quit" << std::endl;
     std::cout << "-----------------------------------------------------------" << std::endl << std::endl;
 }
 
@@ -39,25 +40,28 @@ void Menu::executeOption() {
             show();
             break;
         case '1':
-            option1();
+            runGenerations();
             break;
         case '2':
-            option2();
+            loadFileName();
             break; 
         case '3':
-            option3();
+            clearFileName();
             break; 
         case '4':
-            std::cout << "Option 4 chosen" << std::endl;
+            switchGeneratingFiles();
             break; 
         case '5':
-            option5();
+            switchGeneratingImages();
             break; 
         case '6':
-            option6(true);
+            switchStepByStep();
             break;
         case '7':
-            std::cout << "Option 7 chosen" << std::endl;
+            removeFolders(true);
+            break;
+        case '8':
+            std::cout << "Option 8 chosen" << std::endl;
             break;
         default:
             std::cout << "Invalid option" << std::endl;
@@ -123,21 +127,24 @@ std::string Menu::askForFileName() {
 }
 
 void Menu::deleteFoldersIfExist() {
-    option6(false);
+    removeFolders(false);
 }
 
-void Menu::option1() {
+// Option 1
+void Menu::runGenerations() {
     appRunner.run();
 }
 
-void Menu::option2() {
+// Option 2
+void Menu::loadFileName() {
     std::string fileName = askForFileName();
     if(fileName.length() > 0) {
         appRunner.setInitFile(fileName);
     }
 }
 
-void Menu::option3() {
+// Option 3
+void Menu::clearFileName() {
     if(appRunner.getInitFile() != "") {
         appRunner.setInitFile("");
         std::cout << "The file with initial generation cleared. Now you can draw initial generation."; 
@@ -148,7 +155,30 @@ void Menu::option3() {
     }
 }
 
-void Menu::option5() {
+// Option 4
+void Menu::switchGeneratingFiles() {
+    if(appRunner.getGenerateFiles()) {
+        std::cout << "Generating files with generations has been switched off." << std::endl;
+        appRunner.setGenerateFiles(false);
+    } else {
+        std::cout << "Generating files with generations has been switched on." << std::endl;
+        appRunner.setGenerateFiles(true);
+    }
+}
+
+// Option 5
+void Menu::switchGeneratingImages() {
+    if(appRunner.getGenerateImages()) {
+        std::cout << "Generating BMP images has been switched off." << std::endl;
+        appRunner.setGenerateImages(false);
+    } else {
+        std::cout << "Generating BMP images has been switched on." << std::endl;
+        appRunner.setGenerateImages(true);
+    }
+}
+
+// Option 6
+void Menu::switchStepByStep() {
     if(appRunner.getStepByStep()) {
         std::cout << "Step-by-step mode has been switched off." << std::endl;
         appRunner.setStepByStep(false);
@@ -158,7 +188,8 @@ void Menu::option5() {
     }
 }
 
-void Menu::option6(bool printMessages) {
+// Option 7
+void Menu::removeFolders(bool printMessages) {
     std::string deleteGenerations{};
     std::string deleteImages{};
 
@@ -176,14 +207,20 @@ void Menu::option6(bool printMessages) {
     strcpy(deleteGenerationsInC, deleteGenerations.c_str());
     strcpy(deleteImagesInC, deleteImages.c_str());
 
-    if(Utils::doesDirectoryExist("generations")) 
+    if(Utils::doesDirectoryExist("generations")) {
         system(deleteGenerationsInC);
+        if(printMessages)
+            std::cout << "Generations folder has been deleted sucessfully." << std::endl;
+    }
     else
         if(printMessages)
             std::cout << "No generations folder found." << std::endl;
 
-    if(Utils::doesDirectoryExist("images")) 
+    if(Utils::doesDirectoryExist("images")) {
         system(deleteImagesInC);
+        if(printMessages)
+            std::cout << "Images folder has been deleted sucessfully." << std::endl;
+    }
     else
         if(printMessages)
             std::cout << "No images folder found." << std::endl;
