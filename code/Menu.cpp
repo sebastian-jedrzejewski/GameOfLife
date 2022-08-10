@@ -30,8 +30,18 @@ void Menu::show() const {
 }
 
 void Menu::loadInput() {
-    std::cout << "Enter your choice (0 to print options): ";
-    std::cin >> selection;
+    std::string input{};
+
+    do {
+        std::cout << "Enter your choice (0 to print options): ";
+        std::cin >> input;
+
+        if(input.length() != 1) {
+            std::cout << "Invalid option" << std::endl;
+        }
+    } while(input.length() != 1);
+
+    selection = input.at(0);
 }
 
 void Menu::executeOption() {
@@ -61,7 +71,7 @@ void Menu::executeOption() {
             removeFolders(true);
             break;
         case '8':
-            std::cout << "Option 8 chosen" << std::endl;
+            std::cout << "Thank you for using my app!" << std::endl;
             break;
         default:
             std::cout << "Invalid option" << std::endl;
